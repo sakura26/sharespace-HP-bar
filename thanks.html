@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>MozTW Co-Working Space - HeroEverything</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap-table.min.css">
+    <link rel="stylesheet" href="css/bootstrap-datepicker3.min.css">
+
+    <!-- Custom styles for this template -->
+    <style>
+      body {
+        padding-top: 50px;
+        padding-bottom: 20px;
+      }
+    </style>
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="http://getbootstrap.com/assets/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">MozTW Co-Working Space</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <div id="login_block">
+            <form id="login_form" class="navbar-form navbar-right">
+              <div class="form-group">
+                <input type="text" id="login_mail" placeholder="Email" class="form-control">
+              </div>
+              <div class="form-group">
+                <input type="password" id="login_passwd" placeholder="Password" class="form-control">
+              </div>
+              <button type="submit" id="login_btn" class="btn btn-success">Sign in</button>
+            </form>
+          </div>
+        </div><!--/.navbar-collapse -->
+      </div>
+    </nav>
+
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+      <div class="container inline-block">
+            <p><h1>感謝您的支持！</h1></p>
+            <p><h1>Thanks for your supporting! </h1></p>
+            <p>您的贊助紀錄將會於系統確認後列入統計</p>
+            <p><a href="/">Back to main page</a></p>
+      </div>
+    </div>
+
+
+      <footer>
+        <p>HeroEverything 2015</p>
+      </footer>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="http://getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="js/bootstrap-table.min.js"></script>
+    <script src="js/bootstrap-datepicker.min.js"></script>
+    <script>
+        //bind form login
+        $("#login_form").submit(function(e){
+            jQuery.ajax({
+               url: "api/login.php",
+               data: 'login_mail='+$("#login_mail").val()+'&login_passwd='+$("#login_passwd").val(),
+               type: "GET",
+               dataType: 'json',
+               success: function (msg) {
+                //console.log('try login...login_mail='+$("#login_mail").val()+'&login_passwd='+$("#login_passwd").val());
+                   if (msg.status!="error") {
+                      console.log("logined!");
+                       $( "#login_block" ).html("<span class=\".text-primary navbar-collapse navbar-form navbar-right\" style=\"color:white\">Welcome back! "+msg.nickname+" <a href=\"api/logout-redir.php\">[logout]</a></span>");  //TODO: logout
+                   } 
+                   /*else{
+                    $("#login_mail").val("");
+                    $("#login_passwd").val("");
+                   }*/
+               }
+           });
+           e.preventDefault(); //STOP default action
+        });
+
+        jQuery(document).ready(function () {
+            //load data for user  
+            jQuery.ajax({
+                 url: "api/login.php",
+                 type: "GET",
+                 dataType: 'json',
+                 success: function (msg) {
+                  console.log("checking login..."+msg);
+                     if (msg.status!="error") {
+                      console.log("logined!");
+                         $( "#login_block" ).html("<span class=\".text-primary navbar-collapse navbar-form navbar-right\" style=\"color:white\">Welcome back! "+msg.nickname+" <a href=\"api/logout-redir.php\">[logout]</a></span>");  //TODO: logout
+                     } 
+                 }
+             });
+
+
+
+         });
+    </script>
+  </body>
+</html>
+

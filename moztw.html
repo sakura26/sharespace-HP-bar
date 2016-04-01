@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>HeroEverything</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap-table.min.css">
+    <link rel="stylesheet" href="css/bootstrap-datepicker3.min.css">
+
+    <!-- Custom styles for this template -->
+    <style>
+      body {
+        padding-top: 50px;
+        padding-bottom: 20px;
+      }
+    </style>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" id="navbar_title" href="#">HeroEverything Project</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <div id="login_block">
+            <form id="login_form" class="navbar-form navbar-right">
+              <div class="form-group">
+                <input type="text" id="login_mail" name="login_mail" placeholder="Email" class="form-control">
+              </div>
+              <div class="form-group">
+                <input type="password" id="login_passwd" name="login_passwd" placeholder="Password" class="form-control">
+              </div>
+              <button type="submit" id="login_btn" class="btn btn-success">Sign in</button>
+            </form>
+          </div>
+        </div><!--/.navbar-collapse -->
+      </div>
+    </nav>
+
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+      <div class="container inline-block">
+        <div class="row">
+          <p><img id="main_avatar" src="" width=150 height=150 /></p>
+        </div>
+        <div class="row">
+          <div class="progress" style="background-color:white">
+                  <div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar" id="hp_bar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="min-width:2em;">
+                    <span id="hp_days"></span> remain
+                  </div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="col-md-4">
+          <h2>統計數據</h2>
+          <p>每月平均支出：<span id="cost_avg"></span>$ NTD</p>
+          <p>每月平均造訪：<span id="visitor_avg"></span> 人</p>
+          <p>每次使用支出：<span id="cost_visit_avg"></span>$ NTD</p>
+        </div>
+        <div class="col-md-8">
+          <form class="navbar-form navbar-right" action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top"><!--https://www.paypal.com/cgi-bin/webscr-->
+            <input type="hidden" name="cmd" value="_xclick">
+            <input type="hidden" name="business" value="sakura26-facilitator@ccsakura-net.com">
+            <input type="hidden" name="lc" value="TW">
+            <input type="hidden" name="item_name" value="moztw space">
+            <input type="hidden" name="button_subtype" value="services">
+            <input type="hidden" name="no_note" value="0">
+            <input type="hidden" name="currency_code" value="TWD">
+            <input type="hidden" name="tax_rate" value="0.000">
+            <input type="hidden" name="shipping" value="0">
+            <input type="hidden" name="bn" value="PP-BuyNowBF:btn_buynow_LG.gif:NonHostedGuest">
+            <input type="hidden" name="currency_code" value="TWD">
+            <input type="hidden" name="option_select0" value="a day">
+            <input type="hidden" name="option_amount0" id="pay_cost_aday_avg" value="700">
+            <input type="hidden" name="option_select1" value="a visit">
+            <input type="hidden" name="option_amount1" id="pay_cost_avisit_avg" value="200">
+            <input type="hidden" name="option_select2" value="a month">
+            <input type="hidden" name="option_amount2" id="pay_cost_amonth_avg" value="40000">
+            <input type="hidden" name="option_index" value="0">
+            <input name="notify_url" value="http://moztw.heroeverything.com/api/paypalCallback.php" type="hidden">
+            <input name="return" value="http://moztw.heroeverything.com/thanks.html" type="hidden">
+            <input name="cancel_return" value="http://moztw.heroeverything.com/" type="hidden">
+            <input name="no_shipping" value="1" type="hidden">
+            <input name="no_note" value="1" type="hidden">
+            <div class="form-group">
+               <div class="row">
+                  <p><button type="submit" class="btn btn-primary btn-lg" href="#" role="button" style="width: 455px;" id="donate_btn">Support now!</button><img alt="" border="0" src="https://www.paypalobjects.com/zh_TW/i/scr/pixel.gif" width="1" height="1"></p>
+               </div>
+               <div class="row">
+                  <p>
+                    <input type="hidden" name="on2" value="doname_name"><input type="text" name="os2" maxlength="16" value="Anonymous" class="form-control" size=16>
+                  <input type="hidden" name="on0" value="support_option">
+                  <select name="os0" id="select_btn">
+                    <option id="donate_sw_aday" value="a day" selected>a day NT$</option>
+                    <option id="donate_sw_avisit" value="a visit">a visit NT$</option>
+                    <option id="donate_sw_amonth" value="a month">a month NT$</option>
+                  </select>
+               </p>
+               </div>
+               <div class="row">
+                  <p><input type="hidden" name="on1" value="Leave a comment"><input type="text" name="os1" maxlength="200" placeholder="Leave a comment" class="form-control" size=64></p>
+               </div>
+            </div>
+          </form>
+          
+       </div>
+      </div>
+      <div class="row">
+         <div class="col-md-12">
+            <center><h2>英雄榜</h2></center>
+            <table data-toggle="table" data-url="api/history.php" data-height="299" data-sort-name="name" data-sort-order="desc">
+             <thead>
+                 <tr>
+                     <th data-field="input_date" data-align="right" data-sortable="true">時間</th>
+                     <th data-field="user" data-align="center" data-sortable="true">捐款人</th>
+                     <th data-field="donate_value" data-sortable="true">捐款金額</th>
+                     <th data-field="comment" data-sortable="true">留言</th>
+                 </tr>
+             </thead>
+            </table>
+         </div>
+      </div>
+
+      <hr>
+
+      <footer>
+        <p>HeroEverything 2015</p>
+      </footer>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="js/ie10-viewport-bug-workaround.js"></script>
+    <script src="js/bootstrap-table.min.js"></script>
+    <script src="js/bootstrap-datepicker.min.js"></script>
+    <script>
+        //bind form login
+        $("#login_form").submit(function(e){
+            jQuery.ajax({
+               url: "api/login.php",
+               data: 'login_mail='+$("#login_mail").val()+'&login_passwd='+$("#login_passwd").val(),
+               type: "GET",
+               dataType: 'json',
+               success: function (msg) {
+                //console.log('try login...login_mail='+$("#login_mail").val()+'&login_passwd='+$("#login_passwd").val());
+                   if (msg.permission=="admin" || msg.permission=="keyholder"){ //check permission and move
+                      window.location.href = "/admmm.html";
+                    }
+                   if (msg.status!="error") {
+                      console.log("logined!");
+                       $( "#login_block" ).html("<span class=\".text-primary navbar-collapse navbar-form navbar-right\" style=\"color:white\">Welcome back! "+msg.nickname+" <a href=\"api/logout-redir.php\">[logout]</a></span>");  //TODO: logout
+                   } 
+                   /*else{
+                    $("#login_mail").val("");
+                    $("#login_passwd").val("");
+                   }*/
+               }
+           });
+           e.preventDefault(); //STOP default action
+        });
+
+        jQuery(document).ready(function () {
+            //load data for user  
+            jQuery.ajax({
+                 url: "api/login.php",
+                 type: "GET",
+                 dataType: 'json',
+                 success: function (msg) {
+                     console.log("checking login..."+msg);
+                     if (msg.permission=="admin" || msg.permission=="keyholder"){ //check permission and move
+                        window.location.href = "/admmm.html";
+                      }
+                     if (msg.status!="error") {
+                      console.log("logined!");
+                         $( "#login_block" ).html("<span class=\".text-primary navbar-collapse navbar-form navbar-right\" style=\"color:white\">Welcome back! "+msg.nickname+" <a href=\"api/logout-redir.php\">[logout]</a></span>");  //TODO: logout
+                     } 
+                 }
+             });
+
+            //////////load data for bar////////////
+            console.log("loading bar info...");
+            jQuery.ajax({
+                 url: "api/bar.php",
+                 //headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content') },
+                 //data: jQuery('#loginform').serialize(),
+                 data: 'barid=2',  //TODO
+                 type: "POST",
+                 dataType: 'json',
+                 success: function (msg) {
+                     console.log("success");
+                     console.log(msg);
+                     name=msg.name;//最大值＄
+                     avatar_uri=msg.avatar_uri;//最大值＄
+                     c_max=msg.value_max;//最大值＄
+                     c_current=msg.value_current;//當前＄
+                     c_interval=msg.cost_interval;//當前＄
+                     u_max=c_max*msg.rate;//最大值（單位）
+                     u_current=c_current*msg.rate;//當前(單位)
+                     //msg.rate//轉換倍率
+                     //cost_avg//每月平均支出
+                     parcent=msg.value_current/msg.value_max;
+                     v_month=msg.visitor_avg;//每月平均造訪人數
+                     c_aday=c_max/60;//單日金額
+                     c_amonth=c_max/2;//單月金額
+                     c_avisit=c_max/v_month/2;//單次造訪金額
+                     console.log(c_current+"/"+c_max);
+                     //update hp bar
+                     $("title").text(name+" - HeroEverything");
+                     $( "#navbar_title" ).text( name );
+                     $( "#hp_bar" ).attr( "aria-valuenow", c_current );
+                     $( "#hp_bar" ).attr( "aria-valuemax", c_max );
+                     $( "#hp_bar" ).attr( "style",  $( "#hp_bar" ).attr("style")+"; width:"+parcent*100+"%" );
+                     $( "#hp_days" ).text( Math.round(u_current)+msg.unit );
+                     $( "#main_avatar" ).attr( "src", avatar_uri );
+                     //update bar status
+                     $( "#cost_avg" ).text( msg.cost_avg );
+                     $( "#visitor_avg" ).text( v_month );
+                     $( "#cost_visit_avg" ).text( Math.round(c_avisit) );
+                     //update donate info
+                     $( "#donate_sw_aday" ).text( $("#donate_sw_aday").text()+" "+Math.round(c_aday) );
+                     $( "#donate_sw_avisit" ).text( $("#donate_sw_avisit").text()+" "+Math.round(c_avisit) );
+                     $( "#donate_sw_amonth" ).text( $("#donate_sw_amonth").text()+" "+Math.round(c_amonth) );
+                     $( "#pay_cost_aday_avg" ).attr( "value", Math.round(c_aday) );
+                     $( "#pay_cost_avisit_avg" ).attr( "value", Math.round(c_avisit) );
+                     $( "#pay_cost_amonth_avg" ).attr( "value", Math.round(c_amonth) );
+                     //jQuery('#example').html("<thead><tr><th>name</th><th>desc</th><th>orgname</th><th>金額</th></thead> ");
+                     //change btn when select changed
+                    $( "#select_btn" ).on('change', updateBtn);
+                    //do default select
+                    updateBtn();
+                 },
+                 error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    console.log("error?! Status: " + textStatus+" Error: " + errorThrown);//TODO: try reload in 10 secs
+                 }
+             });
+
+              
+
+         });
+
+        function updateBtn() {
+          switch($( "#select_btn" ).val()) {
+              case "a day":
+                  $( "#donate_btn" ).text( "Support a day now! ("+Math.round(c_aday)+"$)" );
+                  break;
+              case "a visit":
+                  $( "#donate_btn" ).text( "Support a visit now! ("+Math.round(c_avisit)+"$)" );
+                  break;
+              case "a month":
+                  $( "#donate_btn" ).text( "Support a month now! ("+Math.round(c_amonth)+"$)" );
+                  break;
+              default:
+                  console.log("not catch?!"+$( "#select_btn" ).val());
+          } 
+        }
+    </script>
+  </body>
+</html>
+

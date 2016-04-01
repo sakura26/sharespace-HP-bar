@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="librabb.it">
+    <meta name="author" content="anotherdream">
+    <link rel="icon" href="../../favicon.ico">
+    <title>[book_title] - librabb.it</title>
+    
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap-table.min.css">
+    <link rel="stylesheet" href="css/bootstrap-datepicker3.min.css">
+    <style>
+      body {
+        padding-top: 50px;
+        padding-bottom: 20px;
+      }
+    </style>
+
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" id="navbar_title" href="#">[site_title]</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <div id="login_block">
+            <form id="login_form" class="navbar-form navbar-right">
+              <div class="form-group">
+                <input type="text" id="login_mail" name="login_mail" placeholder="Email" class="form-control">
+              </div>
+              <div class="form-group">
+                <input type="password" id="login_passwd" name="login_passwd" placeholder="Password" class="form-control">
+              </div>
+              <button type="submit" id="login_btn" class="btn btn-success">Sign in</button>
+            </form>
+          </div>
+        </div><!--/.navbar-collapse -->
+      </div>
+    </nav>
+
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+      <div class="container inline-block">
+        <div class="row">
+          <p><img id="book_frontpage_url" src="[book_sampleurl_front]" width=150 height=150 /></p>
+        </div>
+        <div class="row">
+          <h1>[book_title]</h1><br>
+          <p>[book_subtitle]</p><br>
+          <p>[book_short_desc]</p><br>
+          <p>作者：[book_author_name]</p><br>
+          <p>ISBN：[book_isbn]</p><br>
+          <p>公開日：[book_publish_date]</p><br>
+          <p>對象：[book_is_r18]</p><br>
+          <p>
+          <!-- paypal form starts here-->
+          <form class="navbar-form navbar-right" action="[paypal_api_url]" method="post" target="_top">
+            <input type="hidden" name="cmd" value="_xclick">
+            <input type="hidden" name="business" value="[paypal_business_account]">
+            <input type="hidden" name="lc" value="TW">
+            <input type="hidden" name="item_name" value="[book_title]">
+            <input type="hidden" name="button_subtype" value="services">
+            <input type="hidden" name="no_note" value="0">
+            <input type="hidden" name="currency_code" value="TWD">
+            <input type="hidden" name="tax_rate" value="0.000">
+            <input type="hidden" name="shipping" value="0">
+            <input type="hidden" name="bn" value="PP-BuyNowBF:btn_buynow_LG.gif:NonHostedGuest">
+            <input type="hidden" name="currency_code" value="TWD">
+            <input type="hidden" name="option_select0" value="實體書">
+            <input type="hidden" name="option_amount0" id="pbook" value="[prize_pbook]">
+            <input type="hidden" name="option_select1" value="電子版">
+            <input type="hidden" name="option_amount1" id="ebook" value="[prize_ebook]">
+            <input type="hidden" name="option_index" value="0">
+            <input name="notify_url" value="[paypal_notify_url]" type="hidden">
+            <input name="return" value="[paypal_return]" type="hidden">
+            <input name="cancel_return" value="[paypal_cancel_return]" type="hidden">
+            <input name="no_shipping" value="1" type="hidden">
+            <input name="no_note" value="1" type="hidden">
+            
+              <button type="submit" class="btn btn-primary btn-lg" href="#" role="button" style="width: 455px;" id="donate_btn">帶回家慢慢看</button><img alt="" border="0" src="https://www.paypalobjects.com/zh_TW/i/scr/pixel.gif" width="1" height="1">
+              <button type="submit" class="btn btn-primary btn-lg" href="#" role="button" style="width: 455px;" id="donate_btn">電子書好收藏</button><img alt="" border="0" src="https://www.paypalobjects.com/zh_TW/i/scr/pixel.gif" width="1" height="1"> <!-- TODO:觸發類型選擇 -->
+          </p>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h2>預覽：</h2>
+          <p><a href="#"><img src="[book_sampleurl_1]"></a><a href="#"><img src="[book_sampleurl_2]"></a><a href="#"><img src="[book_sampleurl_3]"></a></p>
+        </div>
+      </div>
+      <hr>
+
+      <div class="row">
+        <div class="col-md-12">
+          <h2>簡介：</h2>
+          <p>[book_desc]</p>
+        </div>
+      </div>
+      <hr>
+
+      <footer>
+        <p>Librabb.it 2015       聯絡我們 | 異常通報 | 舉報濫用</p>
+      </footer>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="js/ie10-viewport-bug-workaround.js"></script>
+    <script src="js/bootstrap-table.min.js"></script>
+    <script src="js/bootstrap-datepicker.min.js"></script>
+    <script>
+        function updateBtn() {
+          switch($( "#select_btn" ).val()) {
+              case "a day":
+                  $( "#donate_btn" ).text( "Support a day now! ("+Math.round(c_aday)+"$)" );
+                  break;
+              case "a visit":
+                  $( "#donate_btn" ).text( "Support a visit now! ("+Math.round(c_avisit)+"$)" );
+                  break;
+              case "a month":
+                  $( "#donate_btn" ).text( "Support a month now! ("+Math.round(c_amonth)+"$)" );
+                  break;
+              default:
+                  console.log("not catch?!"+$( "#select_btn" ).val());
+          } 
+        }
+    </script>
+  </body>
+</html>

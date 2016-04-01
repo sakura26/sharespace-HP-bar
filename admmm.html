@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>HeroEverything</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap-table.min.css">
+    <link rel="stylesheet" href="css/bootstrap-datepicker3.min.css">
+
+    <!-- Custom styles for this template -->
+    <style>
+      body {
+        padding-top: 50px;
+        padding-bottom: 20px;
+      }
+    </style>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" id="navbar_title" href="#">HeroEverything Project</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <div id="login_block">
+            <form id="login_form" class="navbar-form navbar-right">
+              <div class="form-group">
+                <input type="text" id="login_mail" name="login_mail" placeholder="Email" class="form-control">
+              </div>
+              <div class="form-group">
+                <input type="password" id="login_passwd" name="login_passwd" placeholder="Password" class="form-control">
+              </div>
+              <button type="submit" id="login_btn" class="btn btn-success">Sign in</button>
+            </form>
+          </div>
+        </div><!--/.navbar-collapse -->
+      </div>
+    </nav>
+
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+      <div class="container inline-block">
+        <div class="row">
+		      <p><img id="main_avatar" src="" width=150 height=150 /></p>
+		    </div>
+		    <div class="row">
+		    	<div class="progress" style="background-color:white">
+		              <div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar" id="hp_bar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="min-width:2em;">
+		                <span id="hp_days"></span> remain
+		              </div>
+		        </div>
+		    </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-5">
+		          <h2>系統設定</h2>
+        <form id="baredit_form" class="navbar-form navbar-left">
+        <p>名稱：<input type="text" id="bar_name" name="bar_name" maxlength="50" class="form-control" size=50 /></p>
+        <p>縮圖：<input type="text" id="bar_avatar" name="bar_avatar" class="form-control" size=50 /></p>
+        <p>當前預算（當前血量）：<input type="text" id="bar_vol" name="bar_vol" maxlength="10" class="form-control" size=10 /> NTD</p>
+        <p>目標預算（最大血量）：<input type="text" id="bar_max" name="bar_max" maxlength="10" class="form-control" size=10 /> NTD</p>
+        <p>最大血量/血量單位：<input type="text" id="bar_max_unit" name="bar_max_unit" maxlength="10" class="form-control" size=10 /> / <input type="text" id="bar_unit" name="bar_unit" maxlength="10" class="form-control" size=6 />
+          <input type="hidden" id="bar_rate" name="bar_rate" class="form-control"/></p><!-- AJAX轉成rate  rate = $單位最大 / $金額最大 = 每塊錢換成多少單位-->
+        <p>平均每月支出：<input type="text" id="bar_avg_cost" name="bar_avg_cost" maxlength="20" class="form-control" size=10 />
+          <input type="hidden" id="bar_cost_interval" name="bar_cost_interval" class="form-control" value="2592000" /></p><!--每月-->
+        <p>平均每月造訪人數：<input type="text" id="bar_avg_visit" name="bar_avg_visit" maxlength="20" class="form-control" size=10 /></p><!-- TODO: 線上抓-->
+        <p>最後更新時間：<span id="bar_lastupdate"></span></p>
+        <p><button id="baredit_form_btn" type="submit">修改</button></p></form>
+        </div>
+        <div class="col-md-5">
+				  <h2>統計數據</h2>
+		          <p>每月平均支出：<span id="cost_avg"></span>$ NTD</p>
+		          <p>每人次使用支出：<span id="cost_visit_avg"></span>$ NTD</p>
+		          <p>造訪人次：<span id="visitor_avg">9月x人，10月X人, 11..</span></p>
+		          <p>捐款箱統計：<span id="">9月x人，10月X人, 11..</span></p>
+		          <p>線上捐款統計：<span id="">9月x人，10月X人, 11..</span></p>
+       </div>
+       <div class="col-md-2">
+       <!--
+		  <form class="navbar-form" id="keyholder_form">
+            <div class="form-group">
+               <div class="row">
+                  <p>KeyHolder人次登錄：</p>
+                  <p>時間：<input type="text" id="key_date" class="form-control"></p>
+                  <p>人數：<input type="text" name="key_visits" value="" class="form-control" size=6></p>
+                  <p>捐款：<input type="text" name="key_donates" value="" class="form-control" size=6></p>
+                  <p>註記：<input type="text" name="key_comment" value="" class="form-control" size=30></p>
+                  <p><button type="submit" class="btn btn-default" href="#" role="button">Submit</button></p>
+               </div>
+            </div>
+          </form>-->
+       </div>
+
+      </div>
+      <div class="row">
+         <div class="col-md-12">
+            <center><h2>英雄榜</h2></center>
+            <form id="donate_form">
+            <table id="donate_table" data-toggle="table" data-url="api/history.php?mode=keyholder" data-height="299" data-sort-name="input_date" data-sort-order="desc" data-click-to-select="true">
+             <thead>
+                 <tr>
+                     <th data-field="state" data-checkbox="true"></th>
+                     <th data-field="transitionid" data-align="right" data-sortable="true">交易編號</th>
+                     <th data-field="input_date" data-align="right" data-sortable="true">時間</th>
+                     <th data-field="user" data-align="center" data-sortable="true">人名</th>
+                     <th data-field="type" data-align="center" data-sortable="true">類別</th>
+                     <th data-field="donate_value" data-sortable="true">捐款金額</th>
+                     <th data-field="visitors" data-sortable="true">造訪人數</th>
+                     <th data-field="comment" data-sortable="true">留言</th>
+                 </tr>
+             </thead>
+            </table>
+            <button id="donate_form_delete_btn" type="submit">Delete</button>
+          </form>
+         </div>
+      </div>
+      <div class="row">
+         <div class="col-md-12">
+            <center><h2>使用者</h2></center>
+            <form id="user_form">
+            <table id="user_table" data-toggle="table" data-url="api/user.php" data-height="299" data-sort-name="userid" data-sort-order="desc" data-click-to-select="true">
+             <thead>
+                 <tr>
+                     <th data-field="state" data-checkbox="true"></th>
+                     <th data-field="userid" data-align="right" data-sortable="true">編號</th>
+                     <th data-field="nickname" data-align="center" data-sortable="true">暱稱</th>
+                     <th data-field="email" data-align="center" data-sortable="true">email</th>
+                     <th data-field="permission" data-sortable="true">權限</th>
+                 </tr>
+             </thead>
+            </table>
+            <button id="user_form_delete_btn" type="submit">Delete</button>
+            </form>
+          </div>
+      </div>
+      <div class="row">
+         <div class="col-md-12">
+            <form id="useradd_form" class="navbar-form navbar-default">
+            nickname:<input type="text" id="useradd_nickname" maxlength="10" class="form-control" size=10 /> 
+            email:<input type="text" id="useradd_email" maxlength="50" class="form-control" size=30 /> 
+            password:<input type="text" id="useradd_pass" maxlength="20" class="form-control" size=15 /> 
+            permission:<select id="useradd_permission" class="form-control"> 
+              <option value="user">user</option>
+              <option value="keyholder">keyholder</option>
+              <option value="admin">admin</option>
+            </select>
+            <button id="user_form_add_btn" type="submit">Add</button>
+            </form>
+          </div>
+      </div>
+      <hr>
+
+      <footer>
+        <p>HeroEverything 2015</p>
+      </footer>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="js/ie10-viewport-bug-workaround.js"></script>
+    <script src="js/bootstrap-table.min.js"></script>
+    <script src="js/bootstrap-datepicker.min.js"></script>
+    <script>
+        //enable datepicker
+        $('#key_date input').datepicker({
+          format: "yyyy/mm/dd"
+        });
+
+        //do delete donate
+        $('#donate_form').submit(function(e){
+          //get selection
+          //alert('Selected values: ' + JSON.stringify($('#donate_table').bootstrapTable('getSelections')));
+          selectNode=$('#donate_table').bootstrapTable('getSelections');
+          start=true;
+          selectNode.forEach(function(e){
+            if (start){
+              selectedIndex =e.transitionid;
+              start=false;
+            }
+            else{
+              selectedIndex += ","+e.transitionid;
+            }
+          });
+          console.log("donatedel="+selectedIndex);
+          //do ajax delete
+          jQuery.ajax({
+               url: "api/donatedel.php",
+               data: 'transitionid='+selectedIndex,
+               type: "GET",
+               dataType: 'json',
+               success: function (msg) {
+                   if (msg.status=="error") {
+                      console.log("donatedel error!");
+                      //TODO: error msg
+                   } 
+                   $('#donate_table').bootstrapTable('refresh', {url: 'api/history.php?mode=keyholder' });
+               }
+           });
+          e.preventDefault(); //STOP default action
+        });
+
+        //do delete user
+        $('#user_form').submit(function(e){
+          //get selection
+          //alert('Selected values: ' + JSON.stringify($('#user_table').bootstrapTable('getSelections')));
+          selectNode=$('#user_table').bootstrapTable('getSelections');
+          start=true;
+          selectNode.forEach(function(e){
+            if (start){
+              selectedIndex =e.userid;
+              start=false;
+            }
+            else{
+              selectedIndex += ","+e.userid;
+            }
+          });
+          console.log("userdel="+selectedIndex);
+          //do ajax delete
+          jQuery.ajax({
+               url: "api/userdel.php",
+               data: 'userid='+selectedIndex,
+               type: "GET",
+               dataType: 'json',
+               success: function (msg) {
+                   if (msg.status=="error") {
+                      console.log("userdel error!");
+                      //TODO: error msg
+                   } 
+                   $('#user_table').bootstrapTable('refresh', {url: 'api/user.php' });
+               }
+           });
+          e.preventDefault(); //STOP default action
+        });
+
+        //bind form useradd
+        $("#useradd_form").submit(function(e){
+            jQuery.ajax({
+               url: "api/useradd.php",
+               data: 'useradd_nickname='+$("#useradd_nickname").val()+'&useradd_email='+$("#useradd_email").val()+'&useradd_pass='+$("#useradd_pass").val()+'&useradd_permission='+$("#useradd_permission").val(),
+               type: "GET",
+               dataType: 'json',
+               success: function (msg) {
+                   console.log('useradd done');
+                   /*if (msg.status!="error") {
+                      console.log("logined!");
+                       $( "#login_block" ).html("<span class=\".text-primary navbar-collapse navbar-form navbar-right\" style=\"color:white\">Welcome back! "+msg.nickname+" <a href=\"api/logout-redir.php\">[logout]</a></span>");  //TODO: logout
+                   } 
+                   else{
+                    $("#login_mail").val("");
+                    $("#login_passwd").val("");
+                   }*/
+                   $('#user_table').bootstrapTable('refresh', {url: 'api/user.php' });
+               }
+           });
+           e.preventDefault(); //STOP default action
+        });
+
+        //bind form baredit_form
+        $("#baredit_form").submit(function(e){
+            jQuery.ajax({
+               url: "api/barupdate.php",
+               data: $(this).serialize(),
+               //data: 'useradd_nickname='+$("#useradd_nickname").val()+'&useradd_email='+$("#useradd_email").val()+'&useradd_pass='+$("#useradd_pass").val()+'&useradd_permission='+$("#useradd_permission").val(),
+               type: "GET",
+               dataType: 'json',
+               success: function (msg) {
+                   console.log('bar update done');
+                   /*if (msg.status!="error") {
+                      console.log("logined!");
+                       $( "#login_block" ).html("<span class=\".text-primary navbar-collapse navbar-form navbar-right\" style=\"color:white\">Welcome back! "+msg.nickname+" <a href=\"api/logout-redir.php\">[logout]</a></span>");  //TODO: logout
+                   } 
+                   else{
+                    $("#login_mail").val("");
+                    $("#login_passwd").val("");
+                   }*/
+                   location.reload();
+               }
+           });
+           e.preventDefault(); //STOP default action
+        });
+
+        //bind form login
+        $("#login_form").submit(function(e){
+            jQuery.ajax({
+               url: "api/login.php",
+               data: 'login_mail='+$("#login_mail").val()+'&login_passwd='+$("#login_passwd").val(),
+               type: "GET",
+               dataType: 'json',
+               success: function (msg) {
+                //console.log('try login...login_mail='+$("#login_mail").val()+'&login_passwd='+$("#login_passwd").val());
+                   if (msg.status!="error") {
+                      console.log("logined!");
+                       $( "#login_block" ).html("<span class=\".text-primary navbar-collapse navbar-form navbar-right\" style=\"color:white\">Welcome back! "+msg.nickname+" <a href=\"api/logout-redir.php\">[logout]</a></span>");  //TODO: logout
+                   } 
+                   /*else{
+                    $("#login_mail").val("");
+                    $("#login_passwd").val("");
+                   }*/
+               }
+           });
+           e.preventDefault(); //STOP default action
+        });
+
+        // for table
+        /*$(function () {
+            $('#table-methods').next().click(function () {
+                $(this).hide();
+
+                var id = 0,
+                    getRows = function () {
+                        var rows = [];
+
+                        for (var i = 0; i < 10; i++) {
+                            rows.push({
+                                id: id,
+                                name: 'test' + id,
+                                price: '$' + id
+                            });
+                            id++;
+                        }
+                        return rows;
+                    },
+                    // init table use data
+                    $table = $('#table-methods-table').bootstrapTable({
+                        data: getRows()
+                    });
+
+                $('#get-selections').click(function () {
+                    alert('Selected values: ' + JSON.stringify($table.bootstrapTable('getSelections')));
+                });
+                $('#get-data').click(function () {
+                    alert('current data: ' + JSON.stringify($table.bootstrapTable('getData')));
+                });
+                // This demonstrates utilizing the data-method attribute to use one 
+                //     jQuery handler to execute multiple methods. 
+                // ($this).data('method') retrieves the value of the data-method 
+                //     attribute of the object that was clicked which is then passed to 
+                //     the bootstrapTable function. 
+                // Only the load and append methods require a parameter                                 
+                $('#load-data, #append-data, #check-all, #uncheck-all, ' +
+                        '#show-loading, #hide-loading').click(function () {
+                    $table.bootstrapTable($(this).data('method'), getRows());
+                });
+                $('#refresh').click(function () {
+                    $table.bootstrapTable('refresh', {
+                        url: 'data1.json'
+                    });
+                });
+                $('#remove-data').click(function () {
+                    var selects = $table.bootstrapTable('getSelections');
+                        ids = $.map(selects, function (row) {
+                            return row.id;
+                        });
+
+                    $table.bootstrapTable('remove', {
+                        field: 'id',
+                        values: ids
+                    });
+                });
+                $('#update-row').click(function () {
+                    $table.bootstrapTable('updateRow', {
+                        index: 1,
+                        row: {
+                            name: 'test111111',
+                            price: '$111111'
+                        }
+                    });
+                });
+                $('#merge-cells').click(function () {
+                    $table.bootstrapTable('mergeCells', {
+                        index: 1,
+                        field: 'name',
+                        colspan: 2,
+                        rowspan: 3
+                    })
+                });
+                $('#show-column, #hide-column').click(function () {
+                    $table.bootstrapTable($(this).data('method'), 'id');
+                });
+            });
+        });*/
+
+        //bind form keyholder
+        /*$("#keyholder_form").submit(function(e){
+            jQuery.ajax({
+               url: "api/keyholder_commit.php",
+               //data: 'login_mail='+$("#login_mail").val()+'&login_passwd='+$("#login_passwd").val(),
+               data: $("#keyholder_form").serialize(),
+               type: "GET",
+               dataType: 'json',
+               success: function (msg) {
+                   console.log("submit:"+$("#keyholder_form").serialize());
+                   if (msg.status=="success") {
+                      console.log("success submit keyholders record, reflashing page...");
+                      location.reload(); 
+                   } 
+                   else{
+                    console.log("failed updating keyholders record!! reason: "+msg.desc);
+                    alert("failed updating keyholders record!!");
+                    //TODO: better error message
+                   }
+               }
+           });
+           e.preventDefault(); //STOP default action
+        });*/
+
+
+        //bind the rate
+        $('#bar_max_unit').change(function() { 
+            $('#bar_rate').val($( "#bar_max_unit" ).val()/$( "#bar_max" ).val()); // get the current value of the input field.
+        });
+        $('#bar_max').change(function() { 
+            $('#bar_rate').val($( "#bar_max_unit" ).val()/$( "#bar_max" ).val()); // get the current value of the input field.
+        });
+
+        jQuery(document).ready(function () {
+            //load data for user  
+            jQuery.ajax({
+                 url: "api/login.php",
+                 type: "GET",
+                 dataType: 'json',
+                 success: function (msg) {
+                  console.log("checking login..."+msg);
+                     if (msg.permission!="admin" && msg.permission!="keyholder"){ //check permission and kickout
+                        window.location.href = "/";
+                      }
+                     if (msg.status!="error") {
+                      console.log("logined!");
+                         $( "#login_block" ).html("<span class=\".text-primary navbar-collapse navbar-form navbar-right\" style=\"color:white\">Welcome back! "+msg.nickname+" <a href=\"api/logout-redir.php\">[logout]</a></span>");  //TODO: logout
+                     } 
+                 }
+             });
+
+            //load data for bar
+            jQuery.ajax({
+                 url: "api/bar.php",
+                 //headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content') },
+                 //data: jQuery('#loginform').serialize(),
+                 data: 'barid=2',
+                 type: "POST",
+                 dataType: 'json',
+                 success: function (msg) {
+                     console.log("success");
+                     console.log(msg);
+                     name=msg.name;//最大值＄
+                     avatar_uri=msg.avatar_uri;//最大值＄
+                     c_max=msg.value_max;//最大值＄
+                     c_current=msg.value_current;//當前＄
+                     c_interval=msg.cost_interval;//當前＄
+                     u_max=c_max*msg.rate;//最大值（單位）
+                     u_current=c_current*msg.rate;//當前(單位)
+                     //msg.rate//轉換倍率
+                     //cost_avg//每月平均支出
+                     parcent=msg.value_current/msg.value_max;
+                     v_month=msg.visitor_avg;//每月平均造訪人數
+                     c_aday=c_max/60;//單日金額
+                     c_amonth=c_max/2;//單月金額
+                     c_avisit=c_max/v_month/2;//單次造訪金額
+                     console.log(c_current+"/"+c_max);
+                     //update hp bar
+                     $("title").text(name+" - HeroEverything");
+                     $( "#navbar_title" ).text( name );
+                     $( "#hp_bar" ).attr( "aria-valuenow", c_current );
+                     $( "#hp_bar" ).attr( "aria-valuemax", c_max );
+                     $( "#hp_bar" ).attr( "style",  $( "#hp_bar" ).attr("style")+"; width:"+parcent*100+"%" );
+                     $( "#hp_days" ).text( Math.round(u_current)+msg.unit );
+                     $( "#main_avatar" ).attr( "src", avatar_uri );
+                     //update bar status
+                     $( "#cost_avg" ).text( msg.cost_avg );
+                     $( "#visitor_avg" ).text( v_month );
+                     $( "#cost_visit_avg" ).text( Math.round(c_avisit) );
+                     //fill table
+                     $( "#bar_name" ).val( name );
+                     $( "#bar_avatar" ).val( avatar_uri );
+                     $( "#bar_vol" ).val( c_current );
+                     $( "#bar_max" ).val( c_max );
+                     $( "#bar_max_unit" ).val( u_max );
+                     $( "#bar_unit" ).val( msg.unit );
+                     $( "#bar_rate" ).val( msg.rate );
+                     $( "#bar_avg_cost" ).val( msg.cost_avg );
+                     $( "#bar_avg_visit" ).val( msg.visitor_avg );
+                     $( "#bar_lastupdate" ).text( msg.last_update );
+                     //$( "#bar_desc" ).val( "MozTW 工寮資金視覺化互動系統" );
+                     //jQuery('#example').html("<thead><tr><th>name</th><th>desc</th><th>orgname</th><th>金額</th></thead> ");
+                     //change btn when select changed
+                    //$( "#select_btn" ).on('change', updateBtn);
+                    //do default select
+                    //updateBtn();
+                 },
+                 error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    console.log("error?! Status: " + textStatus+" Error: " + errorThrown);//TODO: try reload in 10 secs
+                 }
+             });
+            //load data for user table
+            /*jQuery.ajax({
+                 url: "api/history.php?mode=keyholder",
+                 //headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content') },
+                 //data: jQuery('#loginform').serialize(),
+                 //data: 'barid=2',
+                 type: "POST",
+                 dataType: 'json',
+                 success: function (msg) {
+                     console.log("success");
+                     console.log(msg);
+                     start=true;
+                     outtable='';
+                     col_names={};
+                     col_count=0;
+                     msg.forEach(function (element, index, array) {
+                       outtable+="<table><thead><tr>";
+                       if (start){
+                        //do header
+                        Object.keys(element).forEach(function (element1, index, array) {
+                          outtable+="<th>"+element1+"</th>";
+                          col_names[col_count]=element1;
+                          col_count++;
+                        });
+                        outtable+="</tr></thead>";
+                        //do entry
+                        outtable+="<tr>";
+                        for (i=0;i<col_count;i++)
+                          outtable+="<td>"+element[col_names[i]]+"</td>";
+                        outtable+="</tr>";
+                        start=false;
+                       }
+                       else{
+                        //do enrty
+                        outtable+="<tr>";
+                        for (i=0;i<col_count;i++)
+                          outtable+="<td>"+element[col_names[i]]+"</td>";
+                        outtable+="</tr>";
+                       }
+                       outtable+="</table>";
+                     })
+                     console.log(outtable);
+                 },
+                 error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    console.log("error?! Status: " + textStatus+" Error: " + errorThrown);//TODO: try reload in 10 secs
+                 }
+             });*/
+
+
+         });
+
+        //update label for donate button
+        /*function updateBtn() {
+          switch($( "#select_btn" ).val()) {
+              case "a day":
+                  $( "#donate_btn" ).text( "Support a day now! ("+Math.round(c_aday)+"$)" );
+                  break;
+              case "a visit":
+                  $( "#donate_btn" ).text( "Support a visit now! ("+Math.round(c_avisit)+"$)" );
+                  break;
+              case "a month":
+                  $( "#donate_btn" ).text( "Support a month now! ("+Math.round(c_amonth)+"$)" );
+                  break;
+              default:
+                  console.log("not catch?!"+$( "#select_btn" ).val());
+          } 
+        }
+        function doMgmtTable(element, index, array) {
+          genMgmtTable(element, index, array, tagid);
+        }
+        function genMgmtTable(element, index, array, tagid) {
+          //console.log('a[' + index + '] = ' + element);
+          //gen base table data
+          jQuery('#'+tagid).html("<thead><tr><th>name</th><th>desc</th><th>orgname</th><th>金額</th></thead> ");
+        }*/
+    </script>
+  </body>
+</html>
+
